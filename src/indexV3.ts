@@ -315,7 +315,7 @@ app.patch('/api/incidents/:id/status', requireRole(['admin']), async (req: Reque
   try {
     const { status } = req.body;
     const updated = await db.incidents.update(req.params.id, { status, last_updated: new Date() });
-    await db.timeline.create({
+    await db.timelines.create({
       id: uuidv4(),
       incident_id: req.params.id,
       event_type: 'status_changed',
@@ -335,7 +335,7 @@ app.patch('/api/incidents/:id/status', requireRole(['admin']), async (req: Reque
  */
 app.get('/api/incidents/:id/timeline', async (req: Request, res: Response) => {
   try {
-    const timeline = await db.timeline.findByIncidentId(req.params.id);
+    const timeline = await db.timelines.findByIncidentId(req.params.id);
     res.json(timeline);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -349,7 +349,7 @@ app.get('/api/incidents/:id/timeline', async (req: Request, res: Response) => {
 app.post('/api/incidents/:id/timeline', requireRole(['analyst', 'admin']), async (req: Request, res: Response) => {
   try {
     const { event_type, details } = req.body;
-    const event = await db.timeline.create({
+    const event = await db.timelines.create({
       id: uuidv4(),
       incident_id: req.params.id,
       event_type,
