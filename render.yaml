@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: cyberattacksnews
+    env: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        generateValue: true
+    autoDeploy: true
+    healthCheckPath: /health
+    
+  - type: pserv
+    name: cyberattacksnews-db
+    plan: free
+    ipAllowList: []
+    
+databases:
+  - name: cyberattacksnews
+    version: "15"
+    plan: free
+    postgreSQL:
+      ipAllowList: []

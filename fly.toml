@@ -1,0 +1,42 @@
+# fly.toml for Fly.io deployment
+app = "cyberattacksnews"
+primary_region = "iad"
+
+[build]
+  builder = "heroku"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "3000"
+
+[processes]
+  web = "npm start"
+  release = "npm ci && npm run build && npm run migrate"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 3000
+  processes = ["web"]
+
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.ports]]
+    number = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    number = 443
+    handlers = ["tls", "http"]
+
+[checks]
+  [checks.alive]
+    type = "http"
+    interval = "10s"
+    timeout = "5s"
+    grace_period = "30s"
+    method = "get"
+    path = "/health"
