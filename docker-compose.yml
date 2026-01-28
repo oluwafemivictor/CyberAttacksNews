@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_TYPE: memory
+      LOG_LEVEL: info
+      LOG_FORMAT: text
+      DEDUP_THRESHOLD: 0.85
+      DEDUP_ENABLED: "true"
+      WEBHOOK_TIMEOUT: 5000
+      WEBHOOK_RETRIES: 3
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  # Optional: PostgreSQL database (uncomment to use)
+  # postgres:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     POSTGRES_USER: cyberattacks
+  #     POSTGRES_PASSWORD: changeme
+  #     POSTGRES_DB: cyberattacksnews
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+
+# volumes:
+#   postgres_data:
