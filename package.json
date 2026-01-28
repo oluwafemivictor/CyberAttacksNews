@@ -10,6 +10,8 @@
     "dev": "ts-node src/indexV3.ts",
     "dev:v2": "ts-node src/indexV2.ts",
     "cli": "ts-node src/cli.ts",
+    "migrate": "node scripts/migrate.js",
+    "postinstall": "echo 'Postinstall: run migrations with DATABASE_URL set if desired'",
     "test": "jest",
     "test:integration": "jest --testPathPattern=integration",
     "test:watch": "jest --watch",
