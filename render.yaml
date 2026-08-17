@@ -3,10 +3,8 @@ services:
     name: cyberattacksnews
     runtime: node
     plan: free
-
-    buildCommand: npm ci && npm run build
+    buildCommand: npm install && npm run build
     startCommand: npm start
-
     healthCheckPath: /health
     autoDeploy: true
 
@@ -28,5 +26,6 @@ services:
 databases:
   - name: cyberattacksnews
     plan: free
+    postgresMajorVersion: "16"
     databaseName: cyberattacksnews
     user: cyberattacksnews
